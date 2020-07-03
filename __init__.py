@@ -1,9 +1,12 @@
 import discord
+import json
 
 client = discord.Client()
-_client_id = '365981597276700672'
-_token = 'MzY1OTgxNTk3Mjc2NzAwNjcy.Xv4NSQ.BpzWQ2d2wN2Ox1Peiucb2npPHiQ'
-prefix = '>'
+"""Change bot data in the JSON file"""
+_bot_data = json.load(open('bot_data.json'))
+_token = _bot_data.get('token')
+_client_id = _bot_data.get('client_id')
+prefix = _bot_data.get('prefix')
 
 
 @client.event
@@ -24,20 +27,26 @@ async def on_message(message):
     command = message.content[1:].split(' ')[0]
     args = message.content[1:].split(' ')[1:]
 
+    """Commands"""
     async def invite():
         link = discord.utils.oauth_url(_client_id, discord.Permissions(8))
         await message.channel.send(f"Here's my invite link: {link}")
 
-    async def invalid_command():
-        print(command, args)
+    async def search():
+        print('searching')
 
     commands = {
         'inv': invite,
-        'invite': invite
+        'invite': invite,
+        'search': search
     }
 
-    func = commands.get(command, invalid_command)
-    await func()
+    """Execute command"""
+    func = commands.get(command)
+    try:
+        await func()
+    except TypeError:
+        pass
 
 
 client.run(_token)
