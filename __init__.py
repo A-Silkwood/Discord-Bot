@@ -33,9 +33,19 @@ async def on_message(message):
         link = discord.utils.oauth_url(_client_id, discord.Permissions(8))
         await message.channel.send(f"Here's my invite link: {link}")
 
+    async def join():
+        try:
+            channel = message.author.voice.channel
+        except AttributeError:
+            username = message.author.nick if message.author.nick is not None else message.author.display_name
+            await message.channel.send(f'Sorry {username}, you are not in a channel')
+            return
+        await channel.connect()
+
     commands = {
         'inv': invite,
-        'invite': invite
+        'invite': invite,
+        'join': join
     }
 
     """Execute command"""
