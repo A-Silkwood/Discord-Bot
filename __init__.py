@@ -24,21 +24,18 @@ async def on_message(message):
         return
 
     """Grabs command and arguments"""
-    command = message.content[1:].split(' ')[0]
-    args = message.content[1:].split(' ')[1:]
+    user_input = message.content[1:].split(' ')
+    command = user_input[0]
+    args = user_input[1:]
 
     """Commands"""
     async def invite():
         link = discord.utils.oauth_url(_client_id, discord.Permissions(8))
         await message.channel.send(f"Here's my invite link: {link}")
 
-    async def search():
-        print('searching')
-
     commands = {
         'inv': invite,
-        'invite': invite,
-        'search': search
+        'invite': invite
     }
 
     """Execute command"""
