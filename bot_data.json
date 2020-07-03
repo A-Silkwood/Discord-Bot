@@ -1,5 +1,6 @@
 {
   "token": "insert token",
   "client_id": "insert client id",
+  "owner_id": "insert owner id",
   "prefix": "pick prefix"
 }

@@ -10,6 +10,7 @@ class Bot(discord.Client):
         bot_data = json.load(open('bot_data.json'))
         self._token = bot_data.get('token')
         self._client_id = bot_data.get('client_id')
+        self._owner_id = int(bot_data.get('owner_id'))
         self.prefix = bot_data.get('prefix')
         self.voice_client = None
         self.run(self._token)
@@ -26,7 +27,7 @@ class Bot(discord.Client):
             return
 
         """Grabs command and arguments"""
-        user_input = message.content[1:].split(' ')
+        user_input = message.content[len(self.prefix):].split(' ')
         command = user_input[0]
         args = user_input[1:]
 
@@ -60,11 +61,19 @@ class Bot(discord.Client):
                 await self.voice_client.disconnect()
                 self.voice_client = None
 
+        async def stop():
+            if message.author.id == self._owner_id:
+                await leave()
+                await self.close()
+
         commands = {
             'inv': invite,
             'invite': invite,
             'join': join,
-            'leave': leave
+            'leave': leave,
+            'close': stop,
+            'quit': stop,
+            'stop': stop
         }
 
         """Execute command"""
