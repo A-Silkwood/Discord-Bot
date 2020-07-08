@@ -5,7 +5,7 @@ import os
 
 class Hangman(commands.Cog):
     sessions = {}
-    _help = 'Prefixes: hangman, hang, hm\nEnter ">hangman (letter)" to make a guess\nEnter ">hangman quit" to end the' \
+    _help = 'Prefixes: hangman, hang, hm\nEnter ">hangman [letter]" to make a guess\nEnter ">hangman quit" to end the' \
             'game\nEnter ">hangman reset" to start a new game\n Enter ">hangman show" to show current game'
 
     def __init__(self, client):
@@ -13,11 +13,13 @@ class Hangman(commands.Cog):
         path = os.getcwd() + r'\assets\hangman\wordbank.txt'
         file = open(path, 'r')
         self._word_bank = file.read().splitlines()
-        print('Loaded word bank')
+        print('Hangman loaded word bank')
 
     @commands.command(aliases=['hm', 'hang'])
     async def hangman(self, ctx, *args):
-        if not self.has_session(ctx.author.id):
+        if len(args) == 1 and args[0] == 'help':
+            await ctx.send(self._help)
+        elif not self.has_session(ctx.author.id):
             await self.create_session(ctx)
         else:
             if len(args) == 1:

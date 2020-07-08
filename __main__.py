@@ -1,9 +1,11 @@
 from discord.ext import commands
 from discord.ext.commands import errors
 import os
+import json
 
 client = commands.Bot(command_prefix='>')
-_token = 'MzY1OTgxNTk3Mjc2NzAwNjcy.Xv-FWQ.8b3EcBxJG6KoLCq5kd5gKes-B0c'
+data = json.load(open('bot_data.json'))
+_token = data.get('token')
 
 
 @client.event
